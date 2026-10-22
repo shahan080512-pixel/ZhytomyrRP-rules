@@ -1,0 +1,331 @@
+html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правила сервера | RP Project</title>
+    <!-- Подключаем иконки FontAwesome -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-sidebar: #1e293b;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --border: #334155;
+            --fine-color: #ef4444;
+            --ban-color: #a855f7;
+            --warn-color: #eab308;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Меню слева */
+        .sidebar {
+            width: 320px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            overflow-y: auto;
+            padding: 20px 10px;
+        }
+
+        .sidebar-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.4rem;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .tab-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            transition: 0.2s;
+        }
+
+        .tab-link:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+        }
+
+        .tab-link i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Контент справа */
+        .main-content {
+            margin-left: 320px;
+            flex: 1;
+            padding: 40px;
+        }
+
+        .section-block {
+            margin-bottom: 50px;
+            scroll-margin-top: 40px; /* Отступ при переходе по ссылке */
+        }
+
+        .section-block h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rules-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .rule-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rule-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .rule-id {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .rule-text {
+            font-size: 1rem;
+        }
+
+        .rule-punishment {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            background-color: rgba(255,255,255,0.05);
+            min-width: 160px;
+            text-align: center;
+        }
+
+        /* Цветовая разметка */
+        .type-fine { color: var(--fine-color); border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.05); }
+        .type-ban { color: var(--ban-color); border: 1px solid rgba(168, 85, 247, 0.3); background: rgba(168, 85, 247, 0.05); }
+        .type-warn { color: var(--warn-color); border: 1px solid rgba(234, 179, 8, 0.3); background: rgba(234, 179, 8, 0.05); }
+        .type-jail { color: #f97316; border: 1px solid rgba(249, 115, 22, 0.3); background: rgba(249, 115, 22, 0.05); }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; position: relative; max-height: 300px; border-right: none; border-bottom: 1px solid var(--border); }
+            .main-content { margin-left: 0; padding: 20px; }
+            .rule-card { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .rule-punishment { width: 100%; text-align: left; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- БОКОВОЕ МЕНЮ (ССЫЛКИ) -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h1>Сервер Правил</h1>
+        </div>
+        <a href="#pdd" class="tab-link"><i class="fa-solid fa-car"></i> 1. ПДД</a>
+        <a href="#weapon" class="tab-link"><i class="fa-solid fa-gun"></i> 2. Оружие</a>
+        <a href="#voice" class="tab-link"><i class="fa-solid fa-microphone"></i> 3. Голосовой чат</a>
+        <a href="#attack" class="tab-link"><i class="fa-solid fa-hand-fist"></i> 4. Напад</a>
+        <a href="#nrp" class="tab-link"><i class="fa-solid fa-mask"></i> 5. NRP-поведінка</a>
+        <a href="#rob" class="tab-link"><i class="fa-solid fa-sack-dollar"></i> 6. Пограбування</a>
+        <a href="#police" class="tab-link"><i class="fa-solid fa-shield-halved"></i> 7. NRP-поліція</a>
+        <a href="#bullying" class="tab-link"><i class="fa-solid fa-comments"></i> 8. Булінг</a>
+        <a href="#court" class="tab-link"><i class="fa-solid fa-building-columns"></i> 9. Суд</a>
+        <a href="#ad" class="tab-link"><i class="fa-solid fa-bullhorn"></i> 10. Реклама</a>
+        <a href="#cheats" class="tab-link"><i class="fa-solid fa-triangle-exclamation"></i> 11. Чити</a>
+        <a href="#bhop" class="tab-link"><i class="fa-solid fa-person-running"></i> 12. Bunnyhop</a>
+        <a href="#proc" class="tab-link"><i class="fa-solid fa-file-invoice"></i> 13. Процесуальні дії</a>
+        <a href="#avoid" class="tab-link"><i class="fa-solid fa-door-open"></i> 14. Уникнення</a>
+        <a href="#trespass" class="tab-link"><i class="fa-solid fa-id-card-clip"></i> 15. Проникнення</a>
+        <a href="#gov" class="tab-link"><i class="fa-solid fa-kit-medical"></i> 16. Державні служби</a>
+        <a href="#gz" class="tab-link"><i class="fa-solid fa-tree"></i> 17. Зелені зони</a>
+        <a href="#keys" class="tab-link"><i class="fa-solid fa-key"></i> 18. Відмички</a>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ (ПРАВИЛА ТЕКСТОМ) -->
+    <div class="main-content">
+
+        <!-- 1. ПДД -->
+        <div class="section-block" id="pdd">
+            <h2><i class="fa-solid fa-car"></i> 1. Правила дорожного движения (ПДД)</h2>
+            <div class="rules-container">
+                <div class="rule-card"><div class="rule-info"><span class="rule-id">Пункт 1.0</span><span class="rule-text">Езда по встречной полосе</span></div><div class="rule-punishment type-fine">Штраф 5000€</div></div>
+                <div class="rule-card"><div class="rule-info"><span class="rule-id">Пункт 1.1</span><span class="rule-text">Проезд на красный свет</span></div><div class="rule-punishment type-fine">Автоматический штраф 100€</div></div>
+                <div class="rule-card"><div class="rule-info"><span class="rule-id">Пункт 1.2</span><span class="rule-text">Выключенные фары в темное время суток</span></div><div class="rule-punishment type-fine">Штраф 2000€</div></div>
+                <div class="rule-card"><div class="rule-info"><span class="rule-id">Пункт 1.3</span><span class="rule-text">Неправильная парковка</span></div><div class="rule-punishment type-fine">Штраф 3000€</div></div>
+                <div class="rule-card"><div class="rule-info"><span class="rule-id">Пункт 1.4</span><span class="rule-text">Неиспользование указателей поворота</span></div><div class="rule-punishment type-fine">Штраф 2500€</div></div>
+                <div class="rule-card"><div class="rule-info"><span class="rule-id">Пункт 1.5</span><span class="rule-text">Неосторожная езда</span></div><div class="rule-punishment type-fine">Штраф 4500€</div></div>
+                <div class="rule-card"><div class="rule-info"><span class="rule-id">Пункт 1.6</span><span class="rule-text">Уход с места ДТП</span></div><div class="rule-punishment type-warn">Предупреждение или штраф 3500€</div></div>
+                <div class="rule-card"><div class="rule-info"><span class="rule-id">Пункт 1.7</span><span class="rule-text">Обгон автомобиля</span></div><div class="rule-punishment type-fine">Штраф 1500€</div></div>
+                <div class="rule-card"><div class="rule-info"><span class="rule-id">Пункт 1.8</span><span class="rule-text">Использование проблесковых маячков без необходимости</span></div><div class="rule-punishment type-fine">Штраф 1000€</div></div>
+                <div class="rule-card"><div class="rule-info"><span class="rule-id">Пункт 1.9</span><span class="rule-text">Сельскохозяйственный транспорт в городе</span></div><div class="rule-punishment type-fine">Штраф 7000€</div></div>
+                <div class="rule-card"><div class="rule-info"><span class="rule-id">Пункт 1.10</span><span class="rule-text">Преследование полицией</span></div><div class="rule-punishment type-jail">КПЗ или штраф 8000€</div></div>
+                <div class="rule-card"><div class="rule-info"><span class="rule-id">Пункт 1.11</span><span class="rule-text">Превышение скорости свыше 150 км/ч</span></div><div class="rule-punishment type-fine">Штраф 3500€</div></div>
+Используйте код с осторожностью.
+Пункт 1.12Подрезание автомобиляШтраф 8000€
+
+ 2. Оружие
+
+Пункт 2.0Открытое ношение оружияШтраф 3000€
+Пункт 2.1Использование оружия без лицензииШтраф 5000€ и конфискация
+Пункт 2.2Использование оружия без причиныШтраф 8000€ или бан 1 день
+Пункт 2.3Передача оружия третьим лицамШтраф 2500€
+Пункт 2.4Использование оружия в городе без основанийШтраф 8000€
+
+ 3. Голосовой чат
+
+Пункт 3.0Громкая музыка, посторонние звуки в микрофонШтраф 4000€
+Пункт 3.1Русская музыкаБан 3 дня
+Пункт 3.2Перебивание игроковШтраф 3500€
+Пункт 3.3Издание сексуальных звуковПредупреждение или штраф 7000€
+Пункт 3.4Российская пропагандаБан навсегда
+
+ 4. Нападения
+
+Пункт 4.0VDM (Нанесение урона машиной)Штраф 6000€ или бан 2 дня
+Пункт 4.1RDM (Убийство без RP причины)Штраф 5000€ или бан 2 дня
+Пункт 4.2RK (Убийство из мести)Штраф 4000€ или бан 1 день
+Пункт 4.3DM (Нанесение урона от 3-х ударов)Штраф 3000€
+Пункт 4.4Убийство персонажаШтраф 8000€ или КПЗ
+
+ 5. Non-RP поведение
+
+Пункт 5.0Power Gaming (Изображение супергероя)Предупреждение или бан 2 дня
+Пункт 5.1Meta Gaming (Использование OOC информации)Бан 2 дня
+Пункт 5.2Fail RP (Нарушение логики RP)Бан 1 день
+Пункт 5.3CopBaiting (Провокация полиции)Штраф 4000€ или предупреждение
+Пункт 5.4Убийство игрока в AFKШтраф 8000€
+Пункт 5.5Отсутствие Fear RP (Отсутствие страха за жизнь)Предупреждение или бан 1 день
+Пункт 5.6Combat Logging (Выход из игры во время RP)Предупреждение или бан 3 дня
+Пункт 5.7Помеха офицеру во время задержания или его убийствоБан 3 дня
+Пункт 5.8Езда с преступником на полицейском автоБан 16 дней для всех участников
+
+ 6. Ограбления
+
+Пункт 6.0Ограбление заправкиШтраф 3500€
+Пункт 6.1Ограбление магазинаШтраф 5000€
+Пункт 6.2Ограбление ювелирного магазинаНа усмотрение судьи + конфискация
+Пункт 6.3Ограбление банкаКПЗ или штраф 8000€ и конфискация
+Пункт 6.4Ограбление торгового автоматаШтраф 1500€
+Пункт 6.5Ограбление контейнераШтраф 6000€ и конфискация
+
+ 7. Non-RP Полиция
+
+Пункт 7.0NRP-наручники без причиныШтраф 7000€ или бан 1 день
+Пункт 7.1Обыск без разрешения игрокаПредупреждение или штраф 2000€
+Пункт 7.2Проверка базы данных на розыск без основанийПредупреждение или штраф 3000€
+Пункт 7.3Задержание ради мести / троллингаБан 3 дня
+Пункт 7.4Использование тайзера без причиныШтраф 8000€ или бан 2 дня
+Пункт 7.5Применение силы без необходимостиНа усмотрение администрации
+Пункт 7.6Отходить от полиции дальше чем на 5 метров при задержанииПредупреждение
+Пункт 7.7Отправка в КПЗ без проведения судаБан 2 дня
+
+ 8. Буллинг
+
+Пункт 8.0Буллинг, оскорбления, сексуальный контентШтраф 6000€
+Пункт 8.1Буллинг / оскорбление родственниковБан 14 дней
+
+ 9. Суд
+
+Пункт 9.0Перебивание судьи / адвоката / прокурораШтраф 6500€
+Пункт 9.1Игнорирование решения судаБан 1 день или штраф 5000€
+Пункт 9.2Укрывательство друзей или знакомыхБан 2 дня
+Пункт 9.3Воспрепятствование судуБан 2 дня или штраф 5000€
+Пункт 9.4Давление на судью / адвоката / прокурораШтраф 2000€
+Пункт 9.5Неуважение к судьеШтраф 3000€
+
+ 10. Реклама
+
+Пункт 10.0Реклама ресурсов, спам, провокацииБан навсегда
+
+ 11. Читы
+
+Пункт 11.0Читы, использование багов и уязвимостейБан навсегда
+
+ 12. Bunnyhop
+
+Пункт 12.0Bhop (прыжки для ускорения)Предупреждение (Повторно — бан 3 дня)
+
+ 13. Процессуальные действия
+
+Пункт 13.0Отсутствие видеофиксации нарушения и задержанияШтраф 3000€
+Пункт 13.1Не представился гражданину (звание, имя, должность)Бан 1 день или штраф 4000€
+Пункт 13.2Не зачитал правила МирандыШтраф 4500€
+
+ 14. Уход от наказания
+
+Пункт 14.0Уход от законного наказания, штрафа или банаБан 4 дня или навсегда
+Пункт 14.1Выход из игры во время активного RP-процессаБан 1 день
+
+ 15. Проникновение
+
+Пункт 15.0Проникновение на чужую / охраняемую территориюБан 1 день или штраф 3000€
+Пункт 15.1Присвоение чужой территорииБан 3 дня
+
+ 16. Государственные службы
+
+Пункт 16.0Не пропустил скорую помощь на вызовШтраф 8000€
+Пункт 16.1Убийство государственного служащего при исполненииКПЗ
+Пункт 16.2Поломка автомобиля гос. сотрудникаКомпенсация на усмотрение сотрудника
+Пункт 16.3Сокрытие преступленияБан 4 дня
+
+ 17. Зеленые зоны
+
+Пункт 17.0Запрещены драки в Зеленой ЗонеШтраф 5000€ или бан 1 день
+Пункт 17.1Запрещена стрельба в Зеленой ЗонеБан 3 дня
+Пункт 17.2Ношение маски, бронежилета, разгрузки в ЗЗШтраф 4000€
+
+ 18. Отмычки
+
+Пункт 18.0Хранение, сбыт или использование отмычекШтраф 4500€
